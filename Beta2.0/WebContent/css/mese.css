@@ -1,0 +1,37 @@
+@charset "ISO-8859-1";
+
+ .TABLEmese {
+   border: 1px solid #999;
+   border-collapse: collapse;
+   font-family: Georgia, Times, serif;
+   }
+   .THmese {
+   border: 1px solid #999;
+   font-size: 70%;
+   text-transform: uppercase;
+   }
+   .TDmese {
+   border: 1px solid #999;
+   height: 9em;
+   width:15em;
+   padding: 8px;
+   vertical-align: top;
+   }
+   caption {
+   font-size: 300%;
+   font-style: italic;
+   }
+   .day {
+   text-align: right;
+   color: #366696;
+   }
+   .notes {
+   font-family: Arial, Helvetica, sans-serif;
+   font-size: 80%;
+   text-align: right;
+   padding-left: 20px;
+   }
+
+   .weekend {
+   background-color: #F3F3F3;
+   }
