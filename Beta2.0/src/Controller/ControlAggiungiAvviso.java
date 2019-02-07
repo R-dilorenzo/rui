@@ -1,6 +1,8 @@
 package Controller;
 
 import java.io.IOException;
+import java.sql.SQLException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -9,29 +11,30 @@ import javax.servlet.http.HttpServletResponse;
 
 import Model.*;
 
-/**
+/*
  * Servlet implementation class ControlAggiungiAvviso
  */
 @WebServlet("/ControlAggiungiAvviso")
 public class ControlAggiungiAvviso extends HttpServlet {
-	private static final long serialVersionUID = 1L;
 
-	/**
+  /** The Constant serialVersionUID. */
+  private static final long serialVersionUID = 1L;
+
+	/*
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public ControlAggiungiAvviso() {
+    public ControlAggiungiAvviso() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String nomeAvviso = request.getParameter("nomeAvviso");
-		double oraAvviso = Double.parseDouble(request.getParameter("oraAvviso"));
+        double oraAvviso = Double.parseDouble(request.getParameter("oraAvviso"));
 		String data = request.getParameter("data");
 		String descrizione = request.getParameter("descrizione");
 		String matricolaDocente = request.getParameter("matricolaDocente");
@@ -44,28 +47,31 @@ public class ControlAggiungiAvviso extends HttpServlet {
 		bean.setOraAvviso(oraAvviso);
 		bean.setMatricolaDocente(matricolaDocente);
 
-		AvvisoManager adFilmDAO = new AvvisoManager();
 
-		// The core Logic of the Registration application is present here. We are going
-		// to insert user data in to the database.
-		String userRegistered = AvvisoManager.agAvviso(bean);
+		String userRegistered = null;
+		try {
+			userRegistered = AvvisoManager.agAvviso(bean);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		if (userRegistered.equals("SUCCESS")) // On success, you can display a message to user on Home page
 		{
-			request.getRequestDispatcher("ModificaDocente.jsp").forward(request, response);
+            request.getRequestDispatcher("ModificaDocente.jsp").forward(request, response);
 		} else // On Failure, display a meaningful message to the User.
 		{
 			request.setAttribute("errMessage", userRegistered);
-			request.getRequestDispatcher("/exception.jsp").forward(request, response);
+            request.getRequestDispatcher("/exception.jsp").forward(request, response);
 		}
 
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);

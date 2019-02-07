@@ -158,7 +158,14 @@ table, td {
 
 
 			<br>
-			
+			<button id="but2" type="button">Elimina Prenotazione</button>
+			<div hidden id="deletePren">
+				<h2>Elimina Prenotazione:</h2>
+				<form action="ControlEliminaPrenotazione" method="post">
+					<b>Id</b> della prenotazione da eliminare:<input type="text"
+						name="id" /><br> <input type="submit" value="ESEGUI">
+				</form>
+			</div>
 			<br>
 		</div>
 	</div>

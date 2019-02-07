@@ -14,6 +14,11 @@ import Database.DriverManagerConnectionPool;
 
 public class AvvisoManager {
 
+	/**
+	 * Restituisce tutti gli avvsi presenti nel databse
+	 * @return una lista contenente tutti gli avvisi
+	 * @throws SQLException
+	 */
 	public static ArrayList<Avviso> doRetrieveAll() throws SQLException {
 
 		Connection connection = null;
@@ -53,11 +58,14 @@ public class AvvisoManager {
 		return avvisi;
 	}
 
-	/**
-	 * Questo metodi ritorna una lista di tutti i prodotti presenti nel database
-	 */
 
-	public static ArrayList<Avviso> getAvvisibyDocente(String matricolaDocente) throws SQLException {
+	/**
+	 * Restituisce un array ontenente una lista di tutti gli avvisi pubblicati dal docente 
+	 * @param matricolaDocente dato secondo cui distinguere gli avvisi
+	 * @return la lista di avvisi
+	 * @throws SQLException
+	 */
+	public ArrayList<Avviso> getAvvisibyDocente(String matricolaDocente) throws SQLException {
 		Connection conn = null;
 		PreparedStatement preparedStatement1 = null;
 
@@ -90,15 +98,8 @@ public class AvvisoManager {
 				lista.add(pr);
 			}
 
-		} finally {
-			try {
-				if (preparedStatement1 != null && preparedStatement1 != null) {
-					preparedStatement1.close();
-				}
-			} finally {
-				if (conn != null)
-					conn.close();
-			}
+		} catch (SQLException e) {
+			conn.close();
 		}
 
 		String tempStr;
@@ -159,7 +160,13 @@ public class AvvisoManager {
 		return lista;
 	}
 
-	public static String agAvviso(Avviso avv) {
+	/**
+	 * Aggiunge un avviso
+	 * @param avv l'oggetto da aggiungere al database
+	 * @return una stringa comunicante l'esito dell'operazione
+	 * @throws SQLException 
+	 */
+	public static String agAvviso(Avviso avv) throws SQLException {
 		String nomeAvviso = avv.getNomeAvviso();
 		double oraAvviso = avv.getOraAvviso();
 		String data = avv.getData();
@@ -182,54 +189,46 @@ public class AvvisoManager {
 
 			int i = preparedStatement.executeUpdate();
 
-			if (i != 0) // Just to ensure data has been inserted into the database
-				return "SUCCESS";
-			// driverManagerConnectionPool.releaseConnection(con);
+			return "SUCCESS";
+			
 		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		try {
 			DriverManagerConnectionPool.releaseConnection(con);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
-		return "Oops.. Something went wrong there..!"; // On failure, send a message from here.
+		return "Oops.. Something went wrong there..!"; 
 
 	}
 
+	/**
+	 * Permette di eliminare un'avviso riconosciuto dal suo id
+	 * @param id id dell'avviso
+	 * @return true se l'operazione va a buon fine altrimenti false
+	 * @throws SQLException
+	 */
 	public static boolean eliminaAvviso(int id) throws SQLException {
 		Connection conn = null;
-		PreparedStatement preparedStatement1 = null, ps2 = null;
-		String SQLprova = "SELECT * FROM avviso WHERE id = ?";
+		PreparedStatement preparedStatement1 = null;
 		String selectSQL = "DELETE FROM avviso WHERE id = ?";
+		
 		try {
 			conn = DriverManagerConnectionPool.getConnection();
-			// con = driverManagerConnectionPool.getConnection();
-			ps2 = conn.prepareStatement(SQLprova);
-			ps2.setInt(1, id);
-			ResultSet rs = ps2.executeQuery();
-			if (!rs.next()) {
-
-				return false;
-			}
 			preparedStatement1 = conn.prepareStatement(selectSQL);
 			preparedStatement1.setInt(1, id);
 			preparedStatement1.executeUpdate();
-		} finally {
-			try {
-				if (preparedStatement1 != null) {
-					preparedStatement1.close();
-				}
-			} finally {
-				if (conn != null)
-					conn.close();
-			}
+		} catch (SQLException e) {
+			DriverManagerConnectionPool.releaseConnection(conn);
 		}
 		return true;
 	}
 
-	public static boolean modificaAvviso(int id, String dato, String action) throws SQLException {
+	/**
+	 * Funzione che modifica un avviso indicato tramite id
+	 * @param id serve a riconoscere l'avviso da modificare
+	 * @param dato indica il nuovo dato da aggiungere
+	 * @param action indica l'azione da compiere sull'avviso
+	 * @return true se l'operazione va a buon fine altrimenti false
+	 * @throws SQLException
+	 */
+	public static boolean modificaAvviso(int id, String dato, String action) throws SQLException{
 		Connection conn = null;
 		PreparedStatement preparedStatement5 = null;
 		if (dato == null)
@@ -247,18 +246,9 @@ public class AvvisoManager {
 				preparedStatement5.setInt(2, id);
 				preparedStatement5.execute();
 				return true;
-			} finally {
-				try {
-					if (preparedStatement5 != null) {
-						preparedStatement5.close();
-					}
-				} finally {
-					if (conn != null)
-						conn.close();
-
-				}
-			}
-
+			} catch (SQLException e) {
+				conn.close();
+			} 
 		}
 		if (action.equals("nomeAvviso")) {
 
@@ -280,17 +270,9 @@ public class AvvisoManager {
 				preparedStatement5.setInt(2, id);
 				preparedStatement5.execute();
 				return true;
-			} finally {
-				try {
-					if (preparedStatement5 != null) {
-						preparedStatement5.close();
-					}
-				} finally {
-					if (conn != null)
-						conn.close();
-
-				}
-			}
+			} catch (SQLException e) {
+				conn.close();
+			} 
 
 		}
 		if (action.equals("descrizione")) {
@@ -305,24 +287,21 @@ public class AvvisoManager {
 				preparedStatement5.setInt(2, id);
 				preparedStatement5.execute();
 				return true;
-			} finally {
-				try {
-					if (preparedStatement5 != null) {
-						preparedStatement5.close();
-					}
-				} finally {
-					if (conn != null)
-						conn.close();
-
-				}
-			}
-
+			} catch (SQLException e) {
+				conn.close();
+			} 
 		}
 		return false;
 
 	}
 
-	public static Avviso doRetrieveByKey(int id) throws SQLException {
+	/**
+	 * Ritorna un avviso distinguendolo grazie al suo id
+	 * @param id parametro che permette di riconoscere l'avviso da ritornare
+	 * @return l'avviso
+	 * @throws SQLException
+	 */
+	public Avviso doRetrieveByKey(int id) throws SQLException {
 
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
@@ -348,15 +327,9 @@ public class AvvisoManager {
 				bean.setMatricolaDocente(rs.getString("matricolaDocente"));
 			}
 
-		} finally {
-			try {
-				if (preparedStatement != null)
-					preparedStatement.close();
-			} finally {
-				if (connection != null)
-					connection.close();
-			}
-		}
+		} catch (SQLException e) {
+			connection.close();
+		} 
 		return bean;
 	}
 

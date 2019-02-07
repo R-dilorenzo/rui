@@ -27,11 +27,14 @@ public abstract class Utente {
 		return email;
 	}
 
+	/**
+	 * Imposta l'email dell'utente
+	 * @pre email diverso da null
+	 * @param email parametro da impostare
+	 */
 	public void setEmail(String email) {
-		// Create the Pattern using the regex
-		Pattern p = Pattern.compile(".+@.+\\.[a-z]+");
+		Pattern p = Pattern.compile(".+@.+\\.unisa.it");
 
-		// Match the given string with the pattern
 		Matcher m = p.matcher(email);
 
 		if (m.matches()) {
@@ -43,9 +46,15 @@ public abstract class Utente {
 		return matricola;
 	}
 
+	/**
+	 * Metodo che aggiorna la matricola dell'utente
+	 * @pre matricola diverso da null
+	 * @param matricola parametro da aggiornare
+	 */
 	public void setMatricola(String matricola) {
-		if (matricola.length() == 10)
-		this.matricola = matricola;
+        if (matricola.length() == 10) {
+			this.matricola = matricola;
+        }
 	}
 
 	public String getPassword() {

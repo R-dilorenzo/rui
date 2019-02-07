@@ -1,6 +1,8 @@
 package Controller;
 
 import java.io.IOException;
+import java.sql.SQLException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -9,14 +11,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import Model.*;
 
-/**
+/*
  * Servlet implementation class ControlAggiungiPrenotazione
  */
 @WebServlet("/ControlAggiungiPrenotazione")
 public class ControlAggiungiPrenotazione extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	/**
+	/*
 	 * @see HttpServlet#HttpServlet()
 	 */
 	public ControlAggiungiPrenotazione() {
@@ -46,9 +48,13 @@ public class ControlAggiungiPrenotazione extends HttpServlet {
 
 		PrenotazioneManager pren = new PrenotazioneManager();
 
-		// The core Logic of the Registration application is present here. We are going
-		// to insert user data in to the database.
-		String userRegistered = pren.agPrenotazione(bean);
+		String userRegistered = null;
+		try {
+			userRegistered = pren.agPrenotazione(bean);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		if (userRegistered.equals("SUCCESS")) // On success, you can display a message to user on Home page
 		{
@@ -62,12 +68,10 @@ public class ControlAggiungiPrenotazione extends HttpServlet {
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		// TODO Auto-generated method stub
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
 	}
 

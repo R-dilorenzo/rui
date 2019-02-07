@@ -9,6 +9,11 @@ import Database.DriverManagerConnectionPool;
 
 public class StudenteManager {
 
+	/** Medoto di login
+	 * @pre user diverso da null
+	 * @param user contiene email e password inseriti dallo studente
+	 * @return true se l'operazione va a buon fine altrimenti false
+	 */
 	public static synchronized boolean doRetrieveByUser(Studente user) {
 
 		Connection conn = null;
@@ -46,6 +51,12 @@ public class StudenteManager {
 		return false;
 	}
 
+	/**
+	 * Metodo che registra uno studente
+	 * @pre user diverso da null
+	 * @param user oggetto contenente i dati da inserire nel database
+	 * @return true se l'operazione va a buon fine altrimenti false
+	 */
 	public static synchronized boolean registerUser(Studente user) {
 
 		Docente doc = new Docente();
@@ -88,6 +99,12 @@ public class StudenteManager {
 		return false;
 	}
 
+	/**
+	 * Metodo usato per aggiornare le informazioni dello studente
+	 * @pre user diverso da null
+	 * @param user parametro usato epr aggiornare lo studente
+	 * @return true se l'operazione va a buon fine altrimenti false
+	 */
 	public static synchronized boolean modifyUser(Studente user) {
 
 		Connection conn = null;
@@ -136,6 +153,12 @@ public class StudenteManager {
 		return false;
 	}
 
+	/**
+	 * Restituisce uno studente in base alla matricola aggiornato con tutte le informazioni
+	 * @pre user diverso da null
+	 * @param user usato per riconoscere lo studente 
+	 * @return true se l'operazione va a buon fine altrimenti false
+	 */ 
 	public static synchronized boolean doRetrieveByMatricola(Studente user) {
 
 		Connection conn = null;
@@ -172,6 +195,12 @@ public class StudenteManager {
 		return false;
 	}
 	
+	/**
+	 * Medoto di eliminazione di uno studente
+	 * @pre matricola != null
+	 * @param matricola dato secondo cui cancellare un studente 
+	 * @return true se l'operazione va a buon fine altrimenti false
+	 */
 	public static synchronized boolean eliminaStudente(String matricola) {
 
 		Connection conn = null;
@@ -201,6 +230,12 @@ public class StudenteManager {
 		return false;
 	}
 	
+	/**
+	 * Ritorna uno studente 
+	 * @pre user diverso da null
+	 * @param user usato per riconoscere un studente in base all'email
+	 * @return true se l'operazione va a buon fine altrimenti false
+	 */
 	public static synchronized boolean doRetrieveByEmail(Studente user) {
 
 		Connection conn = null;
