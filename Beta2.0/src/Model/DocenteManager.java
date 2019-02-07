@@ -13,8 +13,11 @@ import Database.DriverManagerConnectionPool;
 public class DocenteManager {
 
 	
-	/* Medoto di login. Prende un oggetto docente con campi email e password settati. Gi altri campi del docente verranno settati 
-	 * con una query se email e password coincidono. Ritorna true se è stato trovato un docente compatibile, false altrimenti*/
+	/** Medoto di login
+	 * @pre user diverso da null
+	 * @param user contiene email e password inseriti dal docente
+	 * @return true se l'operazione va a buon fine altrimenti false
+	 */
 	public static synchronized boolean doRetrieveByUser(Docente user) {
 
 		Connection conn = null;
@@ -62,8 +65,12 @@ public class DocenteManager {
 		return false;
 	}
 
-	/* Medoto di registrazione. Prende un oggetto docente con tutti gli attributi obbligatori settati. Il docente verrà salvato 
-	 * sul db se non esiste gia e ritorna true, false altrimenti*/
+	/**
+	 * Metodo che registra un docente
+	 * @pre user diverso da null
+	 * @param user oggetto contenente i dati da inserire nel database
+	 * @return true se l'operazione va a buon fine altrimenti false
+	 */
 	public static synchronized boolean registerUser(Docente user) {
 
 		/* Verifica che non esista un altro docente/studente con la stessa mail/matricola */
@@ -109,7 +116,12 @@ public class DocenteManager {
 		return false;
 	}
 
-	/* Medoto di aggiornamento. Prende un oggetto docente con tutti gli attributi settati e aggiorna il database*/
+	/**
+	 * Modifica i parametri di un docente già esisitente
+	 * @pre user diverso da null
+	 * @param user oggetto usato per aggiornare il database
+	 * @return true se l'operazione va a buon fine altrimenti false
+	 */
 	public static synchronized boolean modifyUser(Docente user) {
 
 		Connection conn = null;
@@ -170,7 +182,12 @@ public class DocenteManager {
 		return false;
 	}
 
-	/* Secondo medoto di aggiornamento */
+
+	/**
+	 * Modifica l'orario di riceviemnto di un docente
+	 * @param user oggetto usato per aggiornare ora, data e ufficio di ricevimento
+	 * @return true se l'operazione va a buon fine altrimenti false
+	 */
 	public static synchronized boolean modifyRicevimento(Docente user) {
 
 		Connection conn = null;
@@ -237,7 +254,11 @@ public class DocenteManager {
 		return false;
 	}
 
-	/* Ritorna tutti i docenti del db*/
+	/**
+	 * Ritorna tutti i docenti presenti nel db
+	 *  @pre true
+	 * @return true se l'operazione va a buon fine altrimenti false
+	 */
 	public static synchronized ArrayList<Docente> doRetrieveAll() {
 
 		ArrayList<Docente> docenti = new ArrayList<Docente>();
@@ -309,7 +330,12 @@ public class DocenteManager {
 		return null;
 	}
 
-	/* Ritorna un docente in base alla matricola */
+	/**
+	 * Restituisce un docente in base alla matricola aggiornato con tutte le informazioni
+	 * @pre user diverso da null
+	 * @param user usato per riconoscere il docente 
+	 * @return true se l'operazione va a buon fine altrimenti false
+	 */ 
 	public static synchronized boolean doRetrieveByMatricola(Docente user) {
 
 		Connection conn = null;
@@ -356,7 +382,12 @@ public class DocenteManager {
 		return false;
 	}
 
-	/* Aggiorna l'immagine del docente */
+	/**
+	 * Aggiorna l'immagine del docente
+	 * @pre user diverso da null
+	 * @param user oggetto usato per aggiornare l'immagine del docente
+	 * @return true se l'operazione va a buon fine altrimenti false
+	 */  
 	public static boolean modifyImage(Docente user) {
 		Connection conn = null;
 		PreparedStatement ps = null;
@@ -385,7 +416,12 @@ public class DocenteManager {
 		return false;
 	}
 	
-	/*Medoto di eliminazione, usato per testing */
+	/**
+	 * Medoto di eliminazione di un docente
+	 * @pre matricola != null
+	 * @param matricola dato secondo cui cancellare un docente 
+	 * @return true se l'operazione va a buon fine altrimenti false
+	 */
 	public static synchronized boolean eliminaDocente(String matricola) {
 
 		Connection conn = null;
@@ -415,7 +451,12 @@ public class DocenteManager {
 		return false;
 	}
 	
-	/*Ritorna un docente in base alla matricola */
+	/**
+	 * Ritorna un docente 
+	 * @pre user diverso da null
+	 * @param user usato per riconoscere un docente in base all'email
+	 * @return true se l'operazione va a buon fine altrimenti false
+	 */
 	public static synchronized boolean doRetrieveByEmail(Docente user) {
 
 		Connection conn = null;

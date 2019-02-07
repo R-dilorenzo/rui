@@ -18,9 +18,11 @@ import Database.DriverManagerConnectionPool;
 public class PrenotazioneManager {
 
 	/**
-	 * Questo metodi ritorna una lista di tutti i prodotti presenti nel database
+	 * Ritorna una lista dei prodotti presenti nel database
+	 * @pre true
+	 * @return lista contenente tutte la prenotazioni
 	 */
-	public static ArrayList<Prenotazione> doRetrieveAll() throws SQLException {
+	public ArrayList<Prenotazione> doRetrieveAll() throws SQLException {
 		Connection conn = null;
 		PreparedStatement preparedStatement1 = null;
 		ArrayList<Prenotazione> lista = new ArrayList<Prenotazione>();
@@ -35,15 +37,17 @@ public class PrenotazioneManager {
 			while (rs.next()) {
 				Prenotazione pr = new Prenotazione();
 				pr.setData(rs.getString("data"));
-				
+
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 				Calendar cal = Calendar.getInstance();
-				Date date = cal.getTime();                     
+				Date date = cal.getTime();
 				String inActiveDate = null;
 				inActiveDate = sdf.format(date);
-				
-				if (pr.getData().compareTo(inActiveDate) < 0) continue;
-				
+
+				if (pr.getData().compareTo(inActiveDate) < 0) {
+					continue;
+				}
+
 				pr.setOra(rs.getDouble("ora"));
 				pr.setId(rs.getInt("id"));
 				pr.setDescrizione(rs.getString("descrizione"));
@@ -52,20 +56,20 @@ public class PrenotazioneManager {
 				lista.add(pr);
 			}
 
-		} finally {
-			try {
-				if (preparedStatement1 != null && preparedStatement1 != null) {
-					preparedStatement1.close();
-				}
-			} finally {
-				if (conn != null)
-					conn.close();
-			}
-		}
+		} catch (SQLException e) {
+			conn.close();
+		} 
 
 		return lista;
 	}
 
+	/**
+	 * Ritorna tutte leprenotazioni effettuate su un certo docente
+	 * @pre matricoladocente diverso da null
+	 * @param matricolaDocente contiene la matricola del docente di cui prendere tutte le prenotazioni
+	 * @return lista con tutte le prenotazuioni di quel dato docente
+	 * @throws SQLException
+	 */
 	public static ArrayList<Prenotazione> returnPrenotazionebyDocente(String matricolaDocente) throws SQLException {
 		Connection conn = null;
 		PreparedStatement preparedStatement1 = null;
@@ -81,34 +85,29 @@ public class PrenotazioneManager {
 			while (rs.next()) {
 				Prenotazione pr = new Prenotazione();
 				pr.setData(rs.getString("data"));
-				
+
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 				Calendar cal = Calendar.getInstance();
-				Date date = cal.getTime();                     
+				Date date = cal.getTime();
 				String inActiveDate = null;
 				inActiveDate = sdf.format(date);
-				
-				if (pr.getData().compareTo(inActiveDate) < 0) continue;
-				
+
+				if (pr.getData().compareTo(inActiveDate) < 0) {
+					continue;
+				}
+
 				pr.setId(rs.getInt("id"));
 				pr.setMatricolaStudente(rs.getString("matricolaStudente"));
 				pr.setDescrizione(rs.getString("descrizione"));
 				pr.setMatricolaDocente(rs.getString("matricolaDocente"));
 				pr.setOra(rs.getDouble("ora"));
-				
+
 				lista.add(pr);
 			}
 
-		} finally {
-			try {
-				if (preparedStatement1 != null && preparedStatement1 != null) {
-					preparedStatement1.close();
-				}
-			} finally {
-				if (conn != null)
-					conn.close();
-			}
-		}
+		} catch (SQLException e) {
+			conn.close();
+		} 
 
 		String tempStr;
 		double tempOra;
@@ -166,10 +165,16 @@ public class PrenotazioneManager {
 
 			}
 		}
-
 		return lista;
 	}
 
+	/**
+	 * Ritora tutte le prenotazioni effettuate da uno studente
+	 * @pre matricolastudente diverso da null 
+	 * @param matricolaStudente contiene la matricola del docente
+	 * @return lista con tutte le prenotazioni effettuate da un dato studente
+	 * @throws SQLException
+	 */
 	public static ArrayList<Prenotazione> returnPrenotazionebyStudente(String matricolaStudente) throws SQLException {
 		Connection conn = null;
 		PreparedStatement preparedStatement1 = null;
@@ -185,45 +190,42 @@ public class PrenotazioneManager {
 			while (rs.next()) {
 				Prenotazione pr = new Prenotazione();
 				pr.setData(rs.getString("data"));
-			
+
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 				Calendar cal = Calendar.getInstance();
-				Date date = cal.getTime();                     
+				Date date = cal.getTime();
 				String inActiveDate = null;
 				inActiveDate = sdf.format(date);
-				
-				if (pr.getData().compareTo(inActiveDate) < 0) continue;
-				
+
+				if (pr.getData().compareTo(inActiveDate) < 0) {
+					continue;
+				}
+
 				pr.setId(rs.getInt("id"));
 				pr.setMatricolaStudente(rs.getString("matricolaStudente"));
 				pr.setDescrizione(rs.getString("descrizione"));
 				pr.setMatricolaDocente(rs.getString("matricolaDocente"));
 				pr.setOra(rs.getDouble("ora"));
-				
 				pr.setCognomeDocente(rs.getString("cognome"));
 				pr.setNomeDocente(rs.getString("nome"));
 				lista.add(pr);
 			}
 
-		} finally {
-			try {
-				if (preparedStatement1 != null && preparedStatement1 != null) {
-					preparedStatement1.close();
-				}
-			} finally {
-				if (conn != null)
-					conn.close();
-			}
-		}
+		} catch (SQLException e) {
+			conn.close();
+		} 
 
 		return lista;
 	}
 
-	/*
-	 * insermento di oggetto prenotazione nel database con incremento automatico
-	 * dell' id
+	/**
+	 * Aggiunge una prenotazione nel database
+	 * @pre pre diverso da null
+	 * @param pre contiene tutti i dati della prenotazione
+	 * @return una stringa indicante il risultato dell'operazione
+	 * @throws SQLException 
 	 */
-	public static String agPrenotazione(Prenotazione pre) {
+	public String agPrenotazione(Prenotazione pre) throws SQLException {
 		String matricolaStudente = pre.getMatricolaStudente();
 		double ora = pre.getOra();
 		String data = pre.getData();
@@ -243,44 +245,33 @@ public class PrenotazioneManager {
 				auto = rs.getInt(1);
 				auto++;
 			}
-			String query = "insert into prenotazione (id,data,ora,descrizione,matricolaStudente,matricolaDocente)values (?,?,?,?,?,?)"; // Insert
-																																		// user
-																																		// details
-																																		// into
-																																		// the
-																																		// table
-			preparedStatement = con.prepareStatement(query); // Making use of prepared statements here to insert bunch
-																// of data
+			String query = "insert into prenotazione (id,data,ora,descrizione,matricolaStudente,matricolaDocente)values (?,?,?,?,?,?)"; // table
+			preparedStatement = con.prepareStatement(query);
 			preparedStatement.setInt(1, auto);
 			preparedStatement.setString(2, data);
-			preparedStatement.setDouble(3, ora);
-			preparedStatement.setString(4, descrizione);
-			preparedStatement.setString(5, matricolaStudente);
-			preparedStatement.setString(6, matricolaDocente);
+			preparedStatement.setDouble(2 + 1, ora);
+			preparedStatement.setString(2 + 2, descrizione);
+			preparedStatement.setString(2 + 2 + 1, matricolaStudente);
+			preparedStatement.setString(2 + 2 + 2, matricolaDocente);
 
 			int i = preparedStatement.executeUpdate();
 
-			if (i != 0) // Just to ensure data has been inserted into the database
-				return "SUCCESS";
-			// driverManagerConnectionPool.releaseConnection(con);
+			return "SUCCESS";
+
 		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		try {
-			DriverManagerConnectionPool.releaseConnection(con);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return "Oops.. Something went wrong there..!"; // On failure, send a message from here.
+			con.close();
+		} 
+		return "Oops.. Something went wrong there..!";
 
 	}
 
 	/**
-	 * Questo metodo permette di rimuovere una prenotazione dal database. Ha come
-	 * parametro l'id della prenotazione da rimuovere
+	 * Questo metodo permette di rimuovere una prenotazione dal database
+	 * @pre id diverso da null
+	 * @param id della prenotazione da rimuovere
+	 * @return true se l'operazione va a buon fine altrimenti false
 	 */
-	public static boolean eliminaPrenotazione(int id) throws SQLException {
+	public boolean eliminaPrenotazione(int id) throws SQLException {
 		Connection conn = null;
 		PreparedStatement preparedStatement1 = null, ps2 = null;
 		String SQLprova = "SELECT * FROM prenotazione WHERE id = ?";
@@ -298,19 +289,19 @@ public class PrenotazioneManager {
 			preparedStatement1 = conn.prepareStatement(selectSQL);
 			preparedStatement1.setInt(1, id);
 			preparedStatement1.executeUpdate();
-		} finally {
-			try {
-				if (preparedStatement1 != null) {
-					preparedStatement1.close();
-				}
-			} finally {
-				if (conn != null)
-					conn.close();
-			}
-		}
+		} catch (SQLException e) {
+			conn.close();
+		} 
 		return true;
 	}
 
+	/**
+	 * Restituisce una prenotazione
+	 * @pre id diverso da null
+	 * @param id usato per distinguere la prenotazione da restituire
+	 * @return la prenotazione
+	 * @throws SQLException
+	 */
 	public static Prenotazione doRetrieveByKey(int id) throws SQLException {
 
 		Connection connection = null;
@@ -339,27 +330,31 @@ public class PrenotazioneManager {
 				bean.setCognomeDocente(rs.getString("cognome"));
 			}
 
-		} finally {
-			try {
-				if (preparedStatement != null)
-					preparedStatement.close();
-			} finally {
-				if (connection != null)
-					connection.close();
-			}
-		}
+		} catch (SQLException e) {
+			connection.close();
+		} 
 		return bean;
 	}
 
+	/**
+	 * Modifica una prenotazione
+	 * @param id usato per distinguere la prenotazione da modificare
+	 * @param dato valore da aggiornare nella prenotazione
+	 * @param action azione da eseguire sulla prenotazione
+	 * @return true se l'operazione va a buon fine altrimenti false
+	 * @throws SQLException
+	 */
 	public static boolean modificaPrenotazione(int id, String dato, String action) throws SQLException {
 		Connection conn = null;
 		PreparedStatement preparedStatement5 = null;
-		if (dato == null)
+		if (dato == null) {
 			return false;
+		}
 		if (action.equals("ora")) {
 
-			if (dato.length() > 30)
+			if (dato.length() > 30) {
 				return false;
+			}
 
 			String SQL = " UPDATE prenotazione SET ora = ? WHERE id = ?";
 			try {
@@ -369,49 +364,34 @@ public class PrenotazioneManager {
 				preparedStatement5.setInt(2, id);
 				preparedStatement5.execute();
 				return true;
-			} finally {
-				try {
-					if (preparedStatement5 != null) {
-						preparedStatement5.close();
-					}
-				} finally {
-					if (conn != null)
-						conn.close();
-
-				}
-			}
+			} catch (SQLException e) {
+				conn.close();
+			} 
 
 		}
 		if (action.equals("data")) {
 
-			if (dato.length() > 30)
+			if (dato.length() > 30) {
 				return false;
+			}
 
 			String SQL = " UPDATE prenotazione SET data = ? WHERE id = ?";
 			try {
-
 				conn = DriverManagerConnectionPool.getConnection();
 				preparedStatement5 = conn.prepareStatement(SQL);
 				preparedStatement5.setString(1, dato);
 				preparedStatement5.setInt(2, id);
 				preparedStatement5.execute();
 				return true;
-			} finally {
-				try {
-					if (preparedStatement5 != null) {
-						preparedStatement5.close();
-					}
-				} finally {
-					if (conn != null)
-						conn.close();
-
-				}
-			}
+			} catch (SQLException e) {
+				conn.close();
+			} 
 
 		}
 		if (action.equals("descrizione")) {
-			if (dato.length() > 3000)
+			if (dato.length() > 3000) {
 				return false;
+			}
 
 			String SQL = " UPDATE prenotazione SET descrizione = ? WHERE id = ?";
 			try {
@@ -421,21 +401,13 @@ public class PrenotazioneManager {
 				preparedStatement5.setInt(2, id);
 				preparedStatement5.execute();
 				return true;
-			} finally {
-				try {
-					if (preparedStatement5 != null) {
-						preparedStatement5.close();
-					}
-				} finally {
-					if (conn != null)
-						conn.close();
-
-				}
-			}
+			} catch (SQLException e) {
+				conn.close();
+			} 
 
 		}
 		return false;
 
 	}
 
-}// fine classe
+}
