@@ -20,7 +20,7 @@
 		var nome = document.forms["formReg"]["nome"].value;
 		var cognome = document.forms["formReg"]["cognome"].value;
 		var mail = document.forms["formReg"]["email"].value;
-		var mailformat = /^\w+([\.-]?\w+)*@\w+(.unisa.it)+$/;
+		var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w+)+$/;
 		var xhttp = new XMLHttpRequest();
 
 		if (matricola.length != 10) {

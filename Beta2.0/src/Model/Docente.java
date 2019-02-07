@@ -5,25 +5,25 @@ import java.util.ArrayList;
 
 public class Docente extends Utente {
 
-    private String giornoRicevimento1;
-    private String giornoRicevimento2;
-    private Double oraRicevimento1;
-    private Double oraRicevimento2;
-    private Double oraRicevimento3;
-    private Double oraRicevimento4;
-    private String insegnamento1;
-    private String insegnamento2;
-    private String imagePath;
-    private String ufficio;
+	private String giornoRicevimento1;
+	private String giornoRicevimento2;
+	private Double oraRicevimento1;
+	private Double oraRicevimento2;
+	private Double oraRicevimento3;
+	private Double oraRicevimento4;
+	private String insegnamento1;
+	private String insegnamento2;
+	private String imagePath;
+	private String ufficio;
 
-    public Docente() {
-    }
+	public Docente() {
+	}
 
-    public Docente(String email) {
+	public Docente(String email) {
 		super(email);
 	}
 
-    public Docente(String email, String password) {
+	public Docente(String email, String password) {
 		super(email, password);
 	}
 

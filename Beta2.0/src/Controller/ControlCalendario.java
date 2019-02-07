@@ -12,12 +12,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import Model.PrenotazioneManager;
 
-/*
+/**
  * Servlet implementation class ControlCalendario
  */
 @WebServlet("/ControlCalendario")
 public class ControlCalendario extends HttpServlet {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
+       
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -26,26 +27,26 @@ public class ControlCalendario extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 
-    /*
-     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-     */
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-       try {
-            request.setAttribute("RicPren", PrenotazioneManager.returnPrenotazionebyDocente(request.getParameter("matricolaDocente")));
-
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		try {
+			request.setAttribute("RicPren", PrenotazioneManager.returnPrenotazionebyDocente(request.getParameter("matricolaDocente")));
+			
 			RequestDispatcher requestDispatcher = request.getRequestDispatcher("Calendario.jsp");
 			requestDispatcher.forward(request, response);
 		} catch (SQLException e) {
 		}
-
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("Home.jsp");
+		
+		RequestDispatcher requestDispatcher = request.getRequestDispatcher("Home.jsp");
 		requestDispatcher.forward(request, response);
 	}
 
 	/**
-     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
